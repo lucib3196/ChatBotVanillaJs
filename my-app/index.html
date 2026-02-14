@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>my-app</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <!-- Container for chat modal -->
+    <div>
+      <button id="openModal">Open Chat</button>
+      <div id="modal" class="modal hidden">
+        <div class="modal-content">
+          <span id="closeModal" class="close">&times;</span>
+          <div id="chat" class="chat">
+            <div id="chat-messages" class="chat-messages">
+
+            </div>
+            <div class="chat-input">
+              <input id="input" placeholder="Type message..." />
+              <button id="send">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

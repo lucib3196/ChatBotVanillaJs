@@ -1,4 +1,6 @@
 import { Client } from "@langchain/langgraph-sdk";
+import { marked } from "https://esm.sh/marked@9";
+import DOMPurify from "https://esm.sh/dompurify";
 import "./style.css";
 
 // Modal Logic
@@ -12,12 +14,16 @@ closeBtn.addEventListener("click", () => {
   modal.classList.add("hidden");
 });
 
-// API Chat
+// Markdown Rendering
+function renderMarkdown(content) {
+  const rawHTML = marked.parse(content);
+  return DOMPurify.sanitize(rawHTML);
+}
 
+// API Chat
 const chatDiv = document.getElementById("chat-messages");
 const input = document.getElementById("input");
 const sendBtn = document.getElementById("send");
-const statusDiv = document.getElementById("status");
 
 const state = {
   messages: [],
@@ -28,19 +34,24 @@ const state = {
 function appendMessageToDOM(msg) {
   const div = document.createElement("div");
   div.className = `message ${msg.type}`;
-  div.textContent = `${msg.type}: ${msg.content}`;
+  div.innerHTML = `${msg.type}: ${renderMarkdown(msg.content)}`;
+
   chatDiv.appendChild(div);
   chatDiv.classList.add(msg.type);
   chatDiv.scrollTop = chatDiv.scrollHeight;
+
   return div;
 }
 
-const apiUrl = "http://localhost:2024";
-const assistantId = "agent_me135";
+const apiUrl = "http://127.0.0.1:2024";
+const assistantId = "agent_question_tutor";
 
-const client = new Client({ apiUrl: apiUrl });
+const client = new Client({
+  apiUrl: apiUrl,
+  apiKey: "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",
+});
 
-async function submitMessage(message) {
+async function submitMessage(message, questionStub = "", solutionGuide = "") {
   state.error = null;
   state.isLoading = true;
 
@@ -62,10 +73,15 @@ async function submitMessage(message) {
   state.messages.push(assistantMessage);
   const assistantDiv = appendMessageToDOM(assistantMessage);
 
+  const TutorGuide = `The question stub is ${questionStub}\n The approved solution is ${solutionGuide}`;
+
   try {
     const streamResponse = client.runs.stream(null, assistantId, {
       input: {
-        messages: [{ type: "human", content: message }],
+        messages: [
+          { type: "human", content: message },
+          { type: "system", content: TutorGuide },
+        ],
       },
       streamMode: "messages-tuple",
     });
@@ -77,7 +93,11 @@ async function submitMessage(message) {
 
         // Append streamed content
         assistantMessage.content += content;
-        assistantDiv.textContent = `ai: ${assistantMessage.content}`;
+        assistantDiv.innerHTML = renderMarkdown(assistantMessage.content);
+
+        if (window.MathJax) {
+          window.MathJax.typesetPromise([assistantDiv]);
+        }
       }
     }
   } catch (error) {

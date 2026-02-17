@@ -160,3 +160,68 @@ body {
     transform: scale(1);
   }
 }
+
+/* Markdown rendering */
+/* Headings */
+.message h1,
+.message h2,
+.message h3 {
+  margin: 0.6em 0 0.3em;
+  font-weight: 600;
+}
+
+/* Paragraph spacing */
+.message p {
+  margin: 0.4em 0;
+}
+
+/* Lists */
+.message ul,
+.message ol {
+  margin: 0.5em 0 0.5em 1.2em;
+}
+
+/* Blockquotes */
+.message blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 10px;
+  color: #555;
+  margin: 0.6em 0;
+}
+
+/* Inline code */
+.message code {
+  background: #e5e7eb;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+/* Code blocks */
+.message pre {
+  background: #111827;
+  color: #e5e7eb;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+/* Tables */
+.message table {
+  border-collapse: collapse;
+  margin: 0.5em 0;
+  width: 100%;
+}
+
+.message th,
+.message td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+}
+
+.message th {
+  background: #f3f4f6;
+  font-weight: 600;
+}

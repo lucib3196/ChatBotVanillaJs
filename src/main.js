@@ -48,7 +48,7 @@ const assistantId = "agent_question_tutor";
 
 const client = new Client({
   apiUrl: apiUrl,
-  apiKey: "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",
+  apiKey: "api-key",
 });
 
 async function submitMessage(message, questionStub = "", solutionGuide = "") {
